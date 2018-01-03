@@ -1,0 +1,63 @@
+#!/bin/sh
+TIFF_FILES_LIST=`ls TIFF_FILES`
+
+# creates main html which lists all the issues
+	
+> HTML_FILES/main.html
+echo "<!DOCTYPE html>
+<html>
+	<head>
+	</head>
+	<body>
+		" > HTML_FILES/main.html
+for TIFF_FILENAME in $TIFF_FILES_LIST
+do
+#	echo "TIFF_FILENAME: $TIFF_FILENAME"
+	TIFF_FILENAME_WITHOUT_EXT=`basename $TIFF_FILENAME .tif`
+#	echo "TIFF_FILENAME_WITHOUT_EXT:"$TIFF_FILENAME_WITHOUT_EXT""
+	
+# 	creates each individual file for each issue 
+
+	> HTML_FILES/$TIFF_FILENAME_WITHOUT_EXT.html
+	echo "<!DOCTYPE html>
+<html>
+	<head>
+	</head>
+	<body>
+		" > HTML_FILES/$TIFF_FILENAME_WITHOUT_EXT.html
+	mkdir JPEG_FILES/$TIFF_FILENAME_WITHOUT_EXT
+	mkdir HTML_FILES/$TIFF_FILENAME_WITHOUT_EXT
+	convert TIFF_FILES/$TIFF_FILENAME JPEG_FILES/$TIFF_FILENAME_WITHOUT_EXT/$TIFF_FILENAME_WITHOUT_EXT.jpeg
+
+	for JPEG_FILENAME in `ls JPEG_FILES/$TIFF_FILENAME_WITHOUT_EXT`
+	do
+#		echo "JPEG_FILENAME:$JPEG_FILENAME"
+		
+		JPEG_FILENAME_WITHOUT_EXT=`basename $JPEG_FILENAME .jpeg`
+		HTML_FILENAME=$JPEG_FILENAME_WITHOUT_EXT.html
+		echo "<p><a href=\"$TIFF_FILENAME_WITHOUT_EXT/$HTML_FILENAME\">$JPEG_FILENAME_WITHOUT_EXT</a></p>" >> HTML_FILES/$TIFF_FILENAME_WITHOUT_EXT.html	
+#		echo "JPEG_FILENAME_WITHOUT_EXT:$JPEG_FILENAME_WITHOUT_EXT"
+#		echo "HTML_FILENAME:$HTML_FILENAME"
+
+#		creates individual html files for each page
+		
+		> HTML_FILES/$TIFF_FILENAME_WITHOUT_EXT/$HTML_FILENAME
+		echo "<!DOCTYPE html>
+	<html>
+		<head>
+		</head>
+		<body>
+			<img src=/home/rahul/task/sptask/JPEG_FILES/$TIFF_FILENAME_WITHOUT_EXT/$JPEG_FILENAME alt=$JPEG_FILENAME_WITHOUT_EXT>
+			<p><a href=\"/home/rahul/task/sptask/HTML_FILES/main.html\"> BACK TO MAIN</a></p>
+			<p><a href=\"/home/rahul/task/sptask/HTML_FILES/$TIFF_FILENAME_WITHOUT_EXT.html\">BACK IISUE MENU</a></p>
+		</body>
+	</html>" >> HTML_FILES/$TIFF_FILENAME_WITHOUT_EXT/$HTML_FILENAME
+	 done
+	echo "	</body>
+</html>" >> HTML_FILES/$TIFF_FILENAME_WITHOUT_EXT.html
+	
+	echo "<p><a href=\"$TIFF_FILENAME_WITHOUT_EXT/"$TIFF_FILENAME_WITHOUT_EXT"-0.html\">Issue of $TIFF_FILENAME_WITHOUT_EXT</a></p>" >> HTML_FILES/main.html
+done 
+	echo "	</body>
+</html>" >> HTML_FILES/main.html
+exit
