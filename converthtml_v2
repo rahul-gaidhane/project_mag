@@ -1,8 +1,10 @@
 #!/bin/sh
 TIFF_FILES_LIST=`ls TIFF_FILES`	#contains all the tiff files
 
+mkdir -p HTML_FILES JPEG_FILES
+
 # creates main html which lists all the issues
-	
+
 > HTML_FILES/main.html
 echo "<!DOCTYPE html>
 <html>
@@ -26,9 +28,9 @@ do
 		<title>$ISSUENAME</title>
 	</head>
 	<body>
-		" > HTML_FILES/$ISSUENAME.html
-	mkdir JPEG_FILES/$ISSUENAME
-	mkdir HTML_FILES/$ISSUENAME
+		"> HTML_FILES/$ISSUENAME.html
+	mkdir -p JPEG_FILES/$ISSUENAME
+	mkdir -p HTML_FILES/$ISSUENAME
 	convert TIFF_FILES/$TIFF_FILENAME JPEG_FILES/$ISSUENAME/$ISSUENAME.jpeg
 
 	for JPEG_FILENAME in `ls JPEG_FILES/$ISSUENAME`
