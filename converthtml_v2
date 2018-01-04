@@ -64,7 +64,7 @@ do
 	</body>
 </html>" >> HTML_FILES/$ISSUENAME.html
 	
-	echo "<p><a href=\"$ISSUENAME/"$ISSUENAME"-0.html\">Issue of $ISSUENAME</a></p>" >> HTML_FILES/main.html
+	echo "<p><a href=\"$ISSUENAME.html\">Issue of $ISSUENAME</a></p>" >> HTML_FILES/main.html
 done 
 	echo "	</body>
 </html>" >> HTML_FILES/main.html
