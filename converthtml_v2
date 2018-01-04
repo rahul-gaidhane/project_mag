@@ -7,8 +7,7 @@ TIFF_FILES_LIST=`ls TIFF_FILES`	#contains all the tiff files
 echo "<!DOCTYPE html>
 <html>
 	<head>
-		<title>
-		</title>
+		<title>LIST OF ISSUES BETWEEN 1990-1991</title>
 	</head>
 	<body>
 		" > HTML_FILES/main.html
@@ -24,8 +23,7 @@ do
 	echo "<!DOCTYPE html>
 <html>
 	<head>
-		<title>
-		</title>
+		<title>$ISSUENAME</title>
 	</head>
 	<body>
 		" > HTML_FILES/$ISSUENAME.html
@@ -50,8 +48,7 @@ do
 		echo "<!DOCTYPE html>
 	<html>
 		<head>
-			<title>
-			</title>
+			<title>$JPEG_PER_PAGE</title>
 		</head>
 		<body>
 			<img src=\"../../JPEG_FILES/$ISSUENAME/$JPEG_FILENAME\" alt=$JPEG_PER_PAGE>
