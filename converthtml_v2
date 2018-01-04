@@ -1,7 +1,7 @@
 #!/bin/sh
 TIFF_FILES_LIST=`ls TIFF_FILES`	#contains all the tiff files
 
-mkdir -p HTML_FILES JPEG_FILES
+mkdir -p HTML_FILES JPEG_FILES GIF_FILES
 
 # creates main html which lists all the issues
 
@@ -31,6 +31,8 @@ do
 		"> HTML_FILES/$ISSUENAME.html
 	mkdir -p JPEG_FILES/$ISSUENAME
 	mkdir -p HTML_FILES/$ISSUENAME
+	mkdir -p GIF_FILES/$ISSUENAME
+
 	convert TIFF_FILES/$TIFF_FILENAME JPEG_FILES/$ISSUENAME/$ISSUENAME.jpeg
 
 	for JPEG_FILENAME in `ls JPEG_FILES/$ISSUENAME`
@@ -39,8 +41,10 @@ do
 		
 		JPEG_PER_PAGE=`basename $JPEG_FILENAME .jpeg`
 		HTML_PER_PAGE=$JPEG_PER_PAGE.html
-
-		echo "<p><a href=\"$ISSUENAME/$HTML_PER_PAGE\">$JPEG_PER_PAGE</a></p>" >> HTML_FILES/$ISSUENAME.html	
+		GIF_PER_PAGE=$JPEG_PER_PAGE.gif
+		
+		convert JPEG_FILES/$ISSUENAME/$JPEG_FILENAME GIF_FILES/$ISSUENAME/$GIF_PER_PAGE
+		echo "<p><a href=\"$ISSUENAME/$HTML_PER_PAGE\"><img src=\"../GIF_FILES/$ISSUENAME/$GIF_PER_PAGE\" alt=\"$JPEG_PER_PAGE\" style=\"width:200px;height:200px;\">$JPEG_PER_PAGE</a></p>" >> HTML_FILES/$ISSUENAME.html	
 #		echo "JPEG_PER_PAGE:$JPEG_PER_PAGE"
 #		echo "HTML_PER_PAGE:$HTML_PER_PAGE"
 
