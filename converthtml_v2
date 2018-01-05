@@ -1,18 +1,44 @@
 #!/bin/sh
+if [ $# -eq 0 ] 
+then
+	echo "ERROR:
+1.PROVIDE ABSOLUTE/RELATIVE PATH FOR DIRECTORY CONTAINING TIFF FILES.
+2.PROVIDE ABSOLUTE/RELATIVE PATH TO DIRECTORY FOR OUTPUT.[OPTIONAL]"
+	exit
+elif [ $# -eq 1 ] 
+then 
+	echo "ERROR:
+1.PROVIDE ABSOLUTE/RELATIVE PATH TO DIRECTORY FOR OUTPUT."
+	HTML_PATH=`pwd`/HTML_FILES
+	GIF_PATH=`pwd`/GIF_FILES
+	JPEG_PATH=`pwd`/JPEG_FILES
+elif [ $# -eq 2 ]
+then
+	JPEG_PATH=$2/JPEG_FILES
+	HTML_PATH=$2/HTML_FILES
+	GIF_PATH=$2/GIF_FILES
+else
+	echo "ERROR:
+1.PROVIDE ABSOLUTE/RELATIVE PATH FOR DIRECTORY CONTAINING TIFF FILES.
+2.PROVIDE ABSOLUTE/RELATIVE PATH TO DIRECTORY FOR OUTPUT.[OPTIONAL]
+ONLY"
+	exit
+fi
+
 TIFF_FILES_LIST=`ls $1`	#contains all the tiff files
 
-mkdir -p HTML_FILES JPEG_FILES GIF_FILES
+mkdir -p $HTML_PATH $JPEG_PATH $GIF_PATH
 
 # creates main html which lists all the issues
 
-> HTML_FILES/main.html
+> $HTML_PATH/main.html
 echo "<!DOCTYPE html>
 <html>
 	<head>
 		<title>LIST OF ISSUES BETWEEN 1990-1991</title>
 	</head>
 	<body>
-		" > HTML_FILES/main.html
+		" > $HTML_PATH/main.html
 for TIFF_FILENAME in $TIFF_FILES_LIST
 do
 #	echo "TIFF_FILENAME: $TIFF_FILENAME"
@@ -21,21 +47,22 @@ do
 	
 # 	creates each individual file for each issue 
 
-	> HTML_FILES/$ISSUENAME.html
+	> $HTML_PATH/$ISSUENAME.html
 	echo "<!DOCTYPE html>
 <html>
 	<head>
 		<title>$ISSUENAME</title>
 	</head>
 	<body>
-		"> HTML_FILES/$ISSUENAME.html
-	mkdir -p JPEG_FILES/$ISSUENAME
-	mkdir -p HTML_FILES/$ISSUENAME
-	mkdir -p GIF_FILES/$ISSUENAME
+		"> $HTML_PATH/$ISSUENAME.html
 
-	convert $1/$TIFF_FILENAME JPEG_FILES/$ISSUENAME/$ISSUENAME.jpeg
+	mkdir -p $JPEG_PATH/$ISSUENAME
+	mkdir -p $HTML_PATH/$ISSUENAME
+	mkdir -p $GIF_PATH/$ISSUENAME
 
-	for JPEG_FILENAME in `ls JPEG_FILES/$ISSUENAME`
+	convert $1/$TIFF_FILENAME $JPEG_PATH/$ISSUENAME/$ISSUENAME.jpeg
+
+	for JPEG_FILENAME in `ls $JPEG_PATH/$ISSUENAME`
 	do
 #		echo "JPEG_FILENAME:$JPEG_FILENAME"
 		
@@ -43,14 +70,14 @@ do
 		HTML_PER_PAGE=$JPEG_PER_PAGE.html
 		GIF_PER_PAGE=$JPEG_PER_PAGE.gif
 		
-		convert JPEG_FILES/$ISSUENAME/$JPEG_FILENAME GIF_FILES/$ISSUENAME/$GIF_PER_PAGE
-		echo "<p><a href=\"$ISSUENAME/$HTML_PER_PAGE\"><img src=\"../GIF_FILES/$ISSUENAME/$GIF_PER_PAGE\" alt=\"$JPEG_PER_PAGE\" style=\"width:200px;height:200px;\">$JPEG_PER_PAGE</a></p>" >> HTML_FILES/$ISSUENAME.html	
+		convert $JPEG_PATH/$ISSUENAME/$JPEG_FILENAME $GIF_PATH/$ISSUENAME/$GIF_PER_PAGE
+		echo "<p><a href=\"$ISSUENAME/$HTML_PER_PAGE\"><img src=\"../GIF_FILES/$ISSUENAME/$GIF_PER_PAGE\" alt=\"$JPEG_PER_PAGE\" style=\"width:200px;height:200px;\">$JPEG_PER_PAGE</a></p>" >> $HTML_PATH/$ISSUENAME.html	
 #		echo "JPEG_PER_PAGE:$JPEG_PER_PAGE"
 #		echo "HTML_PER_PAGE:$HTML_PER_PAGE"
 
 #		creates individual html files for each page
 		
-		> HTML_FILES/$ISSUENAME/$HTML_PER_PAGE
+		> $HTML_PATH/$ISSUENAME/$HTML_PER_PAGE
 		echo "<!DOCTYPE html>
 	<html>
 		<head>
@@ -61,14 +88,14 @@ do
 			<p><a href=\"../main.html\">BACK TO MAIN</a></p>
 			<p><a href=\"../$ISSUENAME.html\">BACK TO ISSUE MENU</a></p>
 		</body>
-	</html>" >> HTML_FILES/$ISSUENAME/$HTML_PER_PAGE
+	</html>" >> $HTML_PATH/$ISSUENAME/$HTML_PER_PAGE
 	 done
 	echo "			<p><a href=\"main.html\">BACK TO MAIN</a></p>
 	</body>
-</html>" >> HTML_FILES/$ISSUENAME.html
+</html>" >> $HTML_PATH/$ISSUENAME.html
 	
-	echo "<p><a href=\"$ISSUENAME.html\">Issue of $ISSUENAME</a></p>" >> HTML_FILES/main.html
+	echo "<p><a href=\"$ISSUENAME.html\">Issue of $ISSUENAME</a></p>" >> $HTML_PATH/main.html
 done 
 	echo "	</body>
-</html>" >> HTML_FILES/main.html
+</html>" >> $HTML_PATH/main.html
 exit
