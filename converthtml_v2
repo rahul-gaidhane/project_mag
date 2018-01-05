@@ -1,5 +1,5 @@
 #!/bin/sh
-TIFF_FILES_LIST=`ls TIFF_FILES`	#contains all the tiff files
+TIFF_FILES_LIST=`ls $1`	#contains all the tiff files
 
 mkdir -p HTML_FILES JPEG_FILES GIF_FILES
 
@@ -33,7 +33,7 @@ do
 	mkdir -p HTML_FILES/$ISSUENAME
 	mkdir -p GIF_FILES/$ISSUENAME
 
-	convert TIFF_FILES/$TIFF_FILENAME JPEG_FILES/$ISSUENAME/$ISSUENAME.jpeg
+	convert $1/$TIFF_FILENAME JPEG_FILES/$ISSUENAME/$ISSUENAME.jpeg
 
 	for JPEG_FILENAME in `ls JPEG_FILES/$ISSUENAME`
 	do
