@@ -7,8 +7,6 @@ then
 	exit
 elif [ $# -eq 1 ] 
 then 
-	echo "ERROR:
-1.PROVIDE ABSOLUTE/RELATIVE PATH TO DIRECTORY FOR OUTPUT."
 	HTML_PATH=`pwd`/HTML_FILES
 	GIF_PATH=`pwd`/GIF_FILES
 	JPEG_PATH=`pwd`/JPEG_FILES
