@@ -7,7 +7,7 @@ then
 	exit
 elif [ $# -eq 1 ] 
 then
-	mkdir OUTPUT
+	mkdir -p OUTPUT
 	HTML_PATH=OUTPUT/HTML_FILES
 	THUMB_PATH=OUTPUT/THUMB_FILES
 	JPEG_PATH=OUTPUT/JPEG_FILES
