@@ -69,7 +69,7 @@ do
 
 	convert $1/$SOURCE_FILENAME $JPEG_PATH/$ISSUENAME/$ISSUENAME.jpeg 2>/dev/null
 
-	for JPEG_FILENAME in `ls -cr $JPEG_PATH/$ISSUENAME`
+	for JPEG_FILENAME in `ls $JPEG_PATH/$ISSUENAME`
 	do
 #		echo "JPEG_FILENAME:$JPEG_FILENAME"
 		
@@ -77,18 +77,18 @@ do
 		HTML_PER_PAGE=$JPEG_PER_PAGE.html
 		THUMB_PER_PAGE=$JPEG_PER_PAGE.jpeg
 		
-		convert $JPEG_PATH/$ISSUENAME/$JPEG_FILENAME -resize 250x280 $THUMB_PATH/$ISSUENAME/$THUMB_PER_PAGE
+		convert -density 300 $JPEG_PATH/$ISSUENAME/$JPEG_FILENAME -resize 300 -quality 100 $THUMB_PATH/$ISSUENAME/$THUMB_PER_PAGE
 		echo "<p><a href=\"$ISSUENAME/$HTML_PER_PAGE\"><img src=\"../THUMB_FILES/$ISSUENAME/$THUMB_PER_PAGE\" alt=\"$JPEG_PER_PAGE\">$JPEG_PER_PAGE</a></p>" >> $HTML_PATH/$ISSUENAME.html	
 #		echo "JPEG_PER_PAGE:$JPEG_PER_PAGE"
 #		echo "HTML_PER_PAGE:$HTML_PER_PAGE"
-
+		PAGE_NO=`basename $JPEG_FILENAME .jpeg | awk -F- '{print $NF+1}'`
 #		creates individual html files for each page
 		
 		> $HTML_PATH/$ISSUENAME/$HTML_PER_PAGE
 		echo "<!DOCTYPE html>
 	<html>
 		<head>
-			<title>$JPEG_PER_PAGE</title>
+			<title>PAGE $PAGE_NO</title>
 		</head>
 		<body>
 			<img src=\"../../JPEG_FILES/$ISSUENAME/$JPEG_FILENAME\" alt=$JPEG_PER_PAGE>
