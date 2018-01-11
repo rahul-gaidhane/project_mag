@@ -81,7 +81,7 @@ do						#we use loop to repeat some specific tasks for each file.
 
 	# for each file of an issue jpeg files are to be generated and kept in jpeg_dir within specific directory 
 	# of a particular issue.
-	convert $INPUT_DIR/$INPUT_FILENAME -quality 100 -resize 200% $JPEG_DIR/$ISSUEOF/$ISSUEOF.jpeg 2>/dev/null
+	convert $INPUT_DIR/$INPUT_FILENAME -quality 100 $JPEG_DIR/$ISSUEOF/$ISSUEOF.jpeg 2>/dev/null
 
 	for JPEG_FILENAME in `ls $JPEG_DIR/$ISSUEOF`	#loop is used to generate a html file per image.
 	do						
@@ -101,6 +101,8 @@ do						#we use loop to repeat some specific tasks for each file.
 
 		PAGE_NO=`basename $JPEG_FILENAME .jpeg | awk -F- '{print $NF+1}'`	#getting page number from
 											#jpeg_filename
+		MAX_PAGE=`ls $JPEG_DIR/$ISSUEOF | wc -l`	#counting the number of files in issue directory
+	
 #		creates individual html files for each page
 		
 		> $HTML_DIR/$ISSUEOF/$HTML_FILENAME	#creating html file for each image
@@ -111,10 +113,29 @@ do						#we use loop to repeat some specific tasks for each file.
 		</head>
 		<body>
 			<img src=\"../../JPEG_FILES/$ISSUEOF/$JPEG_FILENAME\" alt=$JPEG_NAME>
-			<p><a href=\"../main_page.html\">BACK TO MAIN</a></p>
-			<p><a href=\"../$ISSUEOF.html\">BACK TO ISSUE MENU</a></p>
-		</body>
-	</html>" >> $HTML_DIR/$ISSUEOF/$HTML_FILENAME	#SINGLE FILE IS GENERATED FOR EACH IMAGE
+">>$HTML_DIR/$ISSUEOF/$HTML_FILENAME
+			if [ $PAGE_NO -eq 1 ] 
+			then
+				echo "		<p><a href=\"../main_page.html\">PREVIOUS PAGE</a></p>">> $HTML_DIR/$ISSUEOF/$HTML_FILENAME
+			else
+				PREVIOUS_PAGE=`expr $PAGE_NO - 2`
+				echo "		<p><a href=\"$ISSUEOF-$PREVIOUS_PAGE.html\">PREVIOUS PAGE</a></p>">> $HTML_DIR/$ISSUEOF/$HTML_FILENAME
+			fi
+#			echo "MAX_PAGE:$MAX_PAGE"
+#			echo "PAGE_NO:$PAGE_NO"
+			if [ $PAGE_NO = $MAX_PAGE ]
+			then
+				echo "
+		<p><a href=\"../main_page.html\">NEXT PAGE</a></p>">>$HTML_DIR/$ISSUEOF/$HTML_FILENAME
+			else
+			echo "
+		<p><a href=\"$ISSUEOF-$PAGE_NO.html\">NEXT PAGE</a></p>">>$HTML_DIR/$ISSUEOF/$HTML_FILENAME
+			fi
+		echo "
+		<p><a href=\"../main_page.html\">BACK TO MAIN</a></p>
+		<p><a href=\"../$ISSUEOF.html\">BACK TO ISSUE MENU</a></p>
+	</body>
+</html>">> $HTML_DIR/$ISSUEOF/$HTML_FILENAME	#SINGLE FILE IS GENERATED FOR EACH IMAGE
 	 done
 	echo "			<p><a href=\"main_page.html\">BACK TO MAIN</a></p>	
 	</body>
