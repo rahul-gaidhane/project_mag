@@ -1,108 +1,127 @@
 #!/bin/sh
-if [ $# -eq 0 ] 
-then
+NUMBER_OF_ARGS=$#	#assigning names so that
+#echo "NUMBER_OF_ARGS:$NUMBER_OF_ARGS"
+INPUT_DIR=$1		#it will be easier to 
+#echo "INPUT_DIR:$INPUT_DIR"
+OUTPUT_DIR=$2		#understand the symbols and use its content more freely
+#echo "OUTPUT_DIR:$OUTPUT_DIR"
+
+if [ $NUMBER_OF_ARGS -eq 0 ] 	#checking for number of arguments passed 
+then				#helps to execute the further program or to abort it.
 	echo "ERROR:
 1.PROVIDE ABSOLUTE OR RELATIVE PATH FOR DIRECTORY CONTAINING TIFF FILES.
 2.PROVIDE ABSOLUTE OR RELATIVE PATH TO DIRECTORY FOR OUTPUT.[OPTIONAL]"
 	exit
-elif [ $# -eq 1 ] 
+elif [ $NUMBER_OF_ARGS -eq 1 ] 		#even if one argument is passed instead of 
+then					#two, event is handled by making an output directory.
+	mkdir -p OUTPUT			#and creating the specified directories inside it.
+	HTML_DIR=OUTPUT/HTML_FILES
+	THUMBNAIL_DIR=OUTPUT/THUMBNAIL_FILES
+	JPEG_DIR=OUTPUT/JPEG_FILES
+elif [ $NUMBER_OF_ARGS -eq 2 ]
 then
-	mkdir -p OUTPUT
-	HTML_PATH=OUTPUT/HTML_FILES
-	THUMB_PATH=OUTPUT/THUMB_FILES
-	JPEG_PATH=OUTPUT/JPEG_FILES
-elif [ $# -eq 2 ]
-then
-	JPEG_PATH=$2/JPEG_FILES
-	HTML_PATH=$2/HTML_FILES
-	THUMB_PATH=$2/THUMB_FILES
-else
-	echo "ERROR:
-1.PROVIDE ABSOLUTE OR RELATIVE PATH FOR DIRECTORY CONTAINING TIFF FILES.
+	JPEG_DIR=$OUTPUT_DIR/JPEG_FILES
+	HTML_DIR=$OUTPUT_DIR/HTML_FILES
+	THUMBNAIL_DIR=$OUTPUT_DIR/THUMBNAIL_FILES
+else		# when more than two arguments are passed then to avoid confusion we exit the program execution
+	echo "ERROR:			
+1.PROVIDE ABSOLUTE OR RELATIVE PATH FOR DIRECTORY CONTAINING TIFF FILES.	
 2.PROVIDE ABSOLUTE OR RELATIVE PATH TO DIRECTORY FOR OUTPUT.[OPTIONAL]
 ONLY"
 	exit
 fi
+
+#echo "JPEG_DIR:$JPEG_DIR"
+#echo "HTML_DIR:$HTML_DIR"
+#echo "THUMBNAIL_DIR:$THUMBNAIL_DIR"
  
-SOURCE_FILES=`ls $1`	#contains list of files 
+INPUT_FILES_LIST=`ls $INPUT_DIR`	#contains list of files for which HTML pages are to be generated
+#echo "INPUT_FILES_LIST:$INPUT_FILES_LIST"
 
-mkdir -p $HTML_PATH $JPEG_PATH $THUMB_PATH
+mkdir -p $HTML_DIR $JPEG_DIR $THUMBNAIL_DIR	#create the specified directories to store output
 
-# creates main html which lists all the issues
-
-> $HTML_PATH/main.html
+> $HTML_DIR/main_page.html 	#creates main_page.html inside html directory, which lists all the issues
 echo "<!DOCTYPE html>
 <html>
 	<head>
 		<title>LIST OF ISSUES BETWEEN 1990-1991</title>
 	</head>
 	<body>
-		" > $HTML_PATH/main.html
-for SOURCE_FILENAME in $SOURCE_FILES
-do
-	FILETYPE=`file $1/$SOURCE_FILENAME | cut -d ' ' -f 2`
-#	echo "FILETYPE:$FILETYPE" 
-	if [ "$FILETYPE" = "TIFF" ]
-	then 
-		ISSUENAME=`basename $SOURCE_FILENAME .tif`
-	elif [ "$FILETYPE" = "PDF" ]
+		" > $HTML_DIR/main_page.html
+for INPUT_FILENAME in $INPUT_FILES_LIST		#using loop we convert each INPUT_FILENAME into jpeg images
+do						#we use loop to repeat some specific tasks for each file.
+#	echo "INPUT_FILENAME:$INPUT_FILENAME"
+	INPUT_FILETYPE=`file $INPUT_DIR/$INPUT_FILENAME | cut -d' ' -f 2`
+#	echo "INPUT_FILETYPE:$INPUT_FILETYPE" 
+	if [ "$INPUT_FILETYPE" = "TIFF" ]	#we identify type of file and adjust the code to make program 
+	then 					#generic in terms of its use.
+		ISSUEOF=`basename $INPUT_FILENAME .tif`
+	elif [ "$INPUT_FILETYPE" = "PDF" ]	
 	then
-		ISSUENAME=`basename $SOURCE_FILENAME .pdf`
-	else
+		ISSUEOF=`basename $INPUT_FILENAME .pdf`	#oh I hate this name "ISSUEOF"
+	else				#exit program when an file of inapropriate file type is supplied
 		echo "ERROR:NOT AN APPROPRIATE FILE TYPE"
+		exit
 	fi
-	
+#	echo "ISSUEOF:$ISSUEOF"	
 # 	creates each individual file for each issue 
 
-	> $HTML_PATH/$ISSUENAME.html
+	> $HTML_DIR/$ISSUEOF.html	#create an individual HTML file for issue
 	echo "<!DOCTYPE html>
 <html>
 	<head>
-		<title>$ISSUENAME</title>
+		<title>$ISSUEOF</title>	
 	</head>
 	<body>
-		"> $HTML_PATH/$ISSUENAME.html
+		"> $HTML_DIR/$ISSUEOF.html
 
-	mkdir -p $JPEG_PATH/$ISSUENAME
-	mkdir -p $HTML_PATH/$ISSUENAME
-	mkdir -p $THUMB_PATH/$ISSUENAME
+	mkdir -p $JPEG_DIR/$ISSUEOF		#creating directory by the name consisting of month and year of 
+	mkdir -p $HTML_DIR/$ISSUEOF		#issue to keep all the files of a particular issue in groups
+	mkdir -p $THUMBNAIL_DIR/$ISSUEOF	
 
-	convert $1/$SOURCE_FILENAME $JPEG_PATH/$ISSUENAME/$ISSUENAME.jpeg 2>/dev/null
+	# for each file of an issue jpeg files are to be generated and kept in jpeg_dir within specific directory 
+	# of a particular issue.
+	convert $INPUT_DIR/$INPUT_FILENAME -quality 100 -resize 200% $JPEG_DIR/$ISSUEOF/$ISSUEOF.jpeg 2>/dev/null
 
-	for JPEG_FILENAME in `ls $JPEG_PATH/$ISSUENAME`
-	do
+	for JPEG_FILENAME in `ls $JPEG_DIR/$ISSUEOF`	#loop is used to generate a html file per image.
+	do						
 #		echo "JPEG_FILENAME:$JPEG_FILENAME"
 		
-		JPEG_PER_PAGE=`basename $JPEG_FILENAME .jpeg`
-		HTML_PER_PAGE=$JPEG_PER_PAGE.html
-		THUMB_PER_PAGE=$JPEG_PER_PAGE.jpeg
+		JPEG_NAME=`basename $JPEG_FILENAME .jpeg`	#using jpeg_name we make HTML_FILENAME and
+		HTML_FILENAME=$JPEG_NAME.html			#THUMBNAIL_FILENAME so that files can be created
+		THUMBNAIL_FILENAME=$JPEG_NAME.jpeg		# by that name.
 		
-		convert -density 300 $JPEG_PATH/$ISSUENAME/$JPEG_FILENAME -resize 300 -quality 100 $THUMB_PATH/$ISSUENAME/$THUMB_PER_PAGE
-		echo "<p><a href=\"$ISSUENAME/$HTML_PER_PAGE\"><img src=\"../THUMB_FILES/$ISSUENAME/$THUMB_PER_PAGE\" alt=\"$JPEG_PER_PAGE\">$JPEG_PER_PAGE</a></p>" >> $HTML_PATH/$ISSUENAME.html	
-#		echo "JPEG_PER_PAGE:$JPEG_PER_PAGE"
-#		echo "HTML_PER_PAGE:$HTML_PER_PAGE"
-		PAGE_NO=`basename $JPEG_FILENAME .jpeg | awk -F- '{print $NF+1}'`
+		#generating thumbnails out of each jpeg image using convert command
+		convert $JPEG_DIR/$ISSUEOF/$JPEG_FILENAME -resize 300 -quality 100 $THUMBNAIL_DIR/$ISSUEOF/$THUMBNAIL_FILENAME
+		# creating links to each html_page of an issue
+		echo "<p><a href=\"$ISSUEOF/$HTML_FILENAME\"><img src=\"../THUMBNAIL_FILES/$ISSUEOF/$THUMBNAIL_FILENAME\" alt=\"THUMBNAIL FOR $JPEG_NAME\">$JPEG_NAME</a></p>" >> $HTML_DIR/$ISSUEOF.html	
+
+#		echo "JPEG_NAME:$JPEG_NAME"
+#		echo "HTML_FILENAME:$HTML_FILENAME"
+
+		PAGE_NO=`basename $JPEG_FILENAME .jpeg | awk -F- '{print $NF+1}'`	#getting page number from
+											#jpeg_filename
 #		creates individual html files for each page
 		
-		> $HTML_PATH/$ISSUENAME/$HTML_PER_PAGE
+		> $HTML_DIR/$ISSUEOF/$HTML_FILENAME	#creating html file for each image
 		echo "<!DOCTYPE html>
 	<html>
 		<head>
 			<title>PAGE $PAGE_NO</title>
 		</head>
 		<body>
-			<img src=\"../../JPEG_FILES/$ISSUENAME/$JPEG_FILENAME\" alt=$JPEG_PER_PAGE>
-			<p><a href=\"../main.html\">BACK TO MAIN</a></p>
-			<p><a href=\"../$ISSUENAME.html\">BACK TO ISSUE MENU</a></p>
+			<img src=\"../../JPEG_FILES/$ISSUEOF/$JPEG_FILENAME\" alt=$JPEG_NAME>
+			<p><a href=\"../main_page.html\">BACK TO MAIN</a></p>
+			<p><a href=\"../$ISSUEOF.html\">BACK TO ISSUE MENU</a></p>
 		</body>
-	</html>" >> $HTML_PATH/$ISSUENAME/$HTML_PER_PAGE
+	</html>" >> $HTML_DIR/$ISSUEOF/$HTML_FILENAME	#SINGLE FILE IS GENERATED FOR EACH IMAGE
 	 done
-	echo "			<p><a href=\"main.html\">BACK TO MAIN</a></p>
+	echo "			<p><a href=\"main_page.html\">BACK TO MAIN</a></p>	
 	</body>
-</html>" >> $HTML_PATH/$ISSUENAME.html
-	
-	echo "<p><a href=\"$ISSUENAME.html\">Issue of $ISSUENAME</a></p>" >> $HTML_PATH/main.html
+</html>" >> $HTML_DIR/$ISSUEOF.html	#single file for each issue is generated
+	#list of issues is put on main page
+	echo "<p><a href=\"$ISSUEOF.html\">Issue of $ISSUEOF</a></p>" >> $HTML_DIR/main_page.html
 done 
 	echo "	</body>
-</html>" >> $HTML_PATH/main.html
+</html>" >> $HTML_DIR/main_page.html 	#main file is generated at last.
 exit
