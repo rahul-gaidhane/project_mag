@@ -94,7 +94,7 @@ do						#we use loop to repeat some specific tasks for each file.
 		#generating thumbnails out of each jpeg image using convert command
 		convert -trim $JPEG_DIR/$ISSUEOF/$JPEG_FILENAME -resize 300 -quality 100 $THUMBNAIL_DIR/$ISSUEOF/$THUMBNAIL_FILENAME
 		# creating links to each html_page of an issue
-		echo "<p><a href=\"$ISSUEOF/$HTML_FILENAME\"><img src=\"../THUMBNAIL_FILES/$ISSUEOF/$THUMBNAIL_FILENAME\" alt=\"THUMBNAIL FOR $JPEG_NAME\">$JPEG_NAME</a></p>" >> $HTML_DIR/$ISSUEOF.html	
+#		echo "<p><a href=\"$ISSUEOF/$HTML_FILENAME\"><img src=\"../THUMBNAIL_FILES/$ISSUEOF/$THUMBNAIL_FILENAME\" alt=\"THUMBNAIL FOR $JPEG_NAME\">$JPEG_NAME</a></p>" >> $HTML_DIR/$ISSUEOF.html	
 
 #		echo "JPEG_NAME:$JPEG_NAME"
 #		echo "HTML_FILENAME:$HTML_FILENAME"
@@ -140,6 +140,10 @@ do						#we use loop to repeat some specific tasks for each file.
 	echo "ISSUEOF:$ISSUEOF"
 	echo "MAX_PAGE:$MAX_PAGE"
 	echo "PAGE_NO:$PAGE_NO"
+	for ((number=0; number < $MAX_PAGE; number++))
+	{
+		echo "<p><a href=\"$ISSUEOF/$ISSUEOF-$number.html\"><img src=\"../THUMBNAIL_FILES/$ISSUEOF/$ISSUEOF-$number.jpeg\" alt=\"THUMBNAIL FOR $JPEG_NAME\">$ISSUEOF-$number</a></p>" >> $HTML_DIR/$ISSUEOF.html	
+	}
 	echo "			<p><a href=\"main_page.html\">BACK TO MAIN</a></p>	
 	</body>
 </html>" >> $HTML_DIR/$ISSUEOF.html	#single file for each issue is generated
