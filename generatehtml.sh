@@ -81,7 +81,7 @@ do						#we use loop to repeat some specific tasks for each file.
 
 	# for each file of an issue jpeg files are to be generated and kept in jpeg_dir within specific directory 
 	# of a particular issue.
-	convert $INPUT_DIR/$INPUT_FILENAME -quality 100 $JPEG_DIR/$ISSUEOF/$ISSUEOF.jpeg 2>/dev/null
+	convert -trim -density 200 $INPUT_DIR/$INPUT_FILENAME -quality 100 $JPEG_DIR/$ISSUEOF/$ISSUEOF.jpeg 2>/dev/null
 
 	for JPEG_FILENAME in `ls $JPEG_DIR/$ISSUEOF`	#loop is used to generate a html file per image.
 	do						
@@ -92,7 +92,7 @@ do						#we use loop to repeat some specific tasks for each file.
 		THUMBNAIL_FILENAME=$JPEG_NAME.jpeg		# by that name.
 		
 		#generating thumbnails out of each jpeg image using convert command
-		convert $JPEG_DIR/$ISSUEOF/$JPEG_FILENAME -resize 300 -quality 100 $THUMBNAIL_DIR/$ISSUEOF/$THUMBNAIL_FILENAME
+		convert -trim $JPEG_DIR/$ISSUEOF/$JPEG_FILENAME -resize 300 -quality 100 $THUMBNAIL_DIR/$ISSUEOF/$THUMBNAIL_FILENAME
 		# creating links to each html_page of an issue
 		echo "<p><a href=\"$ISSUEOF/$HTML_FILENAME\"><img src=\"../THUMBNAIL_FILES/$ISSUEOF/$THUMBNAIL_FILENAME\" alt=\"THUMBNAIL FOR $JPEG_NAME\">$JPEG_NAME</a></p>" >> $HTML_DIR/$ISSUEOF.html	
 
@@ -137,6 +137,9 @@ do						#we use loop to repeat some specific tasks for each file.
 	</body>
 </html>">> $HTML_DIR/$ISSUEOF/$HTML_FILENAME	#SINGLE FILE IS GENERATED FOR EACH IMAGE
 	 done
+	echo "ISSUEOF:$ISSUEOF"
+	echo "MAX_PAGE:$MAX_PAGE"
+	echo "PAGE_NO:$PAGE_NO"
 	echo "			<p><a href=\"main_page.html\">BACK TO MAIN</a></p>	
 	</body>
 </html>" >> $HTML_DIR/$ISSUEOF.html	#single file for each issue is generated
