@@ -66,11 +66,14 @@ do						#we use loop to repeat some specific tasks for each file.
 #	echo "ISSUEOF:$ISSUEOF"	
 # 	creates each individual file for each issue 
 
+	ISSUEMONTH=`jq '.issue[0].issuemonth' META_FILES/$ISSUEOF.json | cut -d'"' -f 2` #using jq parser to parse the json metadata
+	ISSUEYEAR=`jq '.issue[1].issueyear' META_FILES/$ISSUEOF.json | cut -d'"' -f 2`   #file to extract month and year of an issue
+
 	> $HTML_DIR/$ISSUEOF.html	#create an individual HTML file for issue
 	echo "<!DOCTYPE html>
 <html>
 	<head>
-		<title>$ISSUEOF</title>	
+		<title>$ISSUEMONTH issue of $ISSUEYEAR</title>	
 	</head>
 	<body>
 		"> $HTML_DIR/$ISSUEOF.html
@@ -109,7 +112,7 @@ do						#we use loop to repeat some specific tasks for each file.
 		echo "<!DOCTYPE html>
 	<html>
 		<head>
-			<title>PAGE $PAGE_NO</title>
+			<title>$ISSUEMONTH issue of $ISSUEYEAR : Page $PAGE_NO</title>
 		</head>
 		<body>
 			<img src=\"../../JPEG_FILES/$ISSUEOF/$JPEG_FILENAME\" alt=$JPEG_NAME>
