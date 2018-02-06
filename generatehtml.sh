@@ -15,6 +15,7 @@ then				#helps to execute the further program or to abort it.
 elif [ $NUMBER_OF_ARGS -eq 1 ] 		#even if one argument is passed instead of 
 then					#two, event is handled by making an output directory.
 	mkdir -p OUTPUT			#and creating the specified directories inside it.
+	OUTPUT_DIR=OUTPUT
 	HTML_DIR=OUTPUT/HTML_FILES
 	THUMBNAIL_DIR=OUTPUT/THUMBNAIL_FILES
 	JPEG_DIR=OUTPUT/JPEG_FILES
@@ -40,14 +41,14 @@ INPUT_FILES_LIST=`ls $INPUT_DIR`	#contains list of files for which HTML pages ar
 
 mkdir -p $HTML_DIR $JPEG_DIR $THUMBNAIL_DIR	#create the specified directories to store output
 
-> $HTML_DIR/index.html 	#creates index.html inside html directory, which lists all the issues
+> $OUTPUT_DIR/index.html 	#creates $OUTPUT_DIR/index.html inside html directory, which lists all the issues
 echo "<!DOCTYPE html>
 <html>
 	<head>
 		<title>LIST OF ISSUES BETWEEN 1990-1991</title>
 	</head>
 	<body>
-		" > $HTML_DIR/index.html
+		" > $OUTPUT_DIR/index.html
 for INPUT_FILENAME in $INPUT_FILES_LIST		#using loop we convert each INPUT_FILENAME into jpeg images
 do						#we use loop to repeat some specific tasks for each file.
 #	echo "INPUT_FILENAME:$INPUT_FILENAME"
@@ -68,10 +69,7 @@ do						#we use loop to repeat some specific tasks for each file.
 
 	ISSUEMONTH=`jq '.issue[0].issuemonth' META_FILES/$ISSUEOF.json | cut -d'"' -f 2` #using jq parser to parse the json metadata
 	ISSUEYEAR=`jq '.issue[1].issueyear' META_FILES/$ISSUEOF.json | cut -d'"' -f 2`  #file to extract month and year of an issue 
-	if [ "$ISSUEMONTH" = "" ] && [ "$ISSUEYEAR" = "" ]
-	then
-		
-	fi
+
 	> $HTML_DIR/$ISSUEOF.html	#create an individual HTML file for issue
 	echo "<!DOCTYPE html>
 <html>
@@ -126,7 +124,10 @@ do						#we use loop to repeat some specific tasks for each file.
 ">>$HTML_DIR/$ISSUEOF/$HTML_FILENAME
 			if [ $PAGE_NO -eq 1 ] 
 			then
-				echo "		<p><a href=\"../index.html\">PREVIOUS PAGE</a></p>">> $HTML_DIR/$ISSUEOF/$HTML_FILENAME
+				echo "		<p><a href=\"../../index.html\">PREVIOUS PAGE</a></p>">> $HTML_DIR/$ISSUEOF/$HTML_FILENAME
+			elif [ $PAGE_NO -eq 2 ]
+			then
+				echo "		<p><a href =\"index.html\">PREVIOUS PAGE</a></p>" >> $HTML_DIR/$ISSUEOF/$HTML_FILENAME
 			else
 				PREVIOUS_PAGE=`expr $PAGE_NO - 2`
 				echo "		<p><a href=\"$ISSUEOF-$PREVIOUS_PAGE.html\">PREVIOUS PAGE</a></p>">> $HTML_DIR/$ISSUEOF/$HTML_FILENAME
@@ -136,13 +137,13 @@ do						#we use loop to repeat some specific tasks for each file.
 			if [ $PAGE_NO = $MAX_PAGE ]
 			then
 				echo "
-		<p><a href=\"../index.html\">NEXT PAGE</a></p>">>$HTML_DIR/$ISSUEOF/$HTML_FILENAME
+		<p><a href=\"../../index.html\">NEXT PAGE</a></p>">>$HTML_DIR/$ISSUEOF/$HTML_FILENAME
 			else
 				echo "
 		<p><a href=\"$ISSUEOF-$PAGE_NO.html\">NEXT PAGE</a></p>">>$HTML_DIR/$ISSUEOF/$HTML_FILENAME
 			fi
 		echo "
-		<p><a href=\"../index.html\">BACK TO MAIN</a></p>
+		<p><a href=\"../../index.html\">BACK TO MAIN</a></p>
 		<p><a href=\"../$ISSUEOF.html\">BACK TO ISSUE MENU</a></p>
 	</body>
 </html>">> $HTML_DIR/$ISSUEOF/$HTML_FILENAME	#SINGLE FILE IS GENERATED FOR EACH IMAGE
@@ -155,12 +156,12 @@ do						#we use loop to repeat some specific tasks for each file.
 	{
 		echo "<p><a href=\"$ISSUEOF/$ISSUEOF-$number.html\"><img src=\"../THUMBNAIL_FILES/$ISSUEOF/$ISSUEOF-$number.jpeg\" alt=\"THUMBNAIL FOR $JPEG_NAME\">$ISSUEOF-$number</a></p>" >> $HTML_DIR/$ISSUEOF.html	
 	}
-	echo "			<p><a href=\"index.html\">BACK TO MAIN</a></p>	
+	echo "			<p><a href=\"../index.html\">BACK TO MAIN</a></p>	
 	</body>
 </html>" >> $HTML_DIR/$ISSUEOF.html	#single file for each issue is generated
 	#list of issues is put on main page
-	echo "<p><a href=\"$ISSUEOF.html\">Issue of $ISSUEOF</a></p>" >> $HTML_DIR/index.html
+	echo "<p><a href=\"HTML_FILES/$ISSUEOF.html\">Issue of $ISSUEOF</a></p>" >> $OUTPUT_DIR/index.html
 done 
 	echo "	</body>
-</html>" >> $HTML_DIR/index.html 	#main file is generated at last.
+</html>" >> $OUTPUT_DIR/index.html 	#main file is generated at last.
 exit
