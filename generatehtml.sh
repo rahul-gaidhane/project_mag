@@ -8,23 +8,16 @@ makeanissue()
 	echo "			<div class=\"row\">
 				<div class=\"col-sm-4\">
 						<a href=\"$ISSUEOF/index.html\"><img src=\"../THUMBNAIL_FILES/$ISSUEOF/$ISSUEOF-0.jpeg\" alt=\"THUMBNAIL FOR $JPEG_NAME\"></a>
-					</div>
-					<div class=\"col-sm-4\">
-						<a href=\"$ISSUEOF/index.html\">
-							<p>$ISSUEOF-0.html</p>
-						</a>
-					</div>
+							<p>PAGE 1</p>
+						</div>
 				</div>" >> $HTML_DIR/$ISSUEOF.html		
 		for ((number=1; number < $MAX_PAGE; number++))
 		{
+				CURRENT_PAGE=`expr $number + 1`
 		echo "				<div class=\"row\">
 						<div class=\"col-sm-4\">
 							<a href=\"$ISSUEOF/$ISSUEOF-$number.html\"><img src=\"../THUMBNAIL_FILES/$ISSUEOF/$ISSUEOF-$number.jpeg\" alt=\"THUMBNAIL FOR $JPEG_NAME\"></a>
-						</div>
-						<div class=\"col-sm-4\">
-							<a href=\"$ISSUEOF/$ISSUEOF-$number.html\">
-								<p>$ISSUEOF-$number</p>
-							</a>
+								<p>PAGE $CURRENT_PAGE</p>
 						</div>
 					</div>
 						" >> $HTML_DIR/$ISSUEOF.html	
