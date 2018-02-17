@@ -6,25 +6,20 @@ makeanissue()
 	ISSUEOF=$1
 	MAX_PAGE=$2
 	echo "			<div class=\"row\">
-				<div class=\"col-sm-4\">
-						<a href=\"$ISSUEOF/index.html\"><img src=\"../THUMBNAIL_FILES/$ISSUEOF/$ISSUEOF-0.jpeg\" alt=\"THUMBNAIL FOR $JPEG_NAME\"></a>
-							<p>PAGE 1</p>
-						</div>
-				</div>" >> $HTML_DIR/$ISSUEOF.html		
+				<div class=\"col-xl-2 col-lg-3 col-md-4 col-sm-6 col-12\">
+					<a href=\"$ISSUEOF/index.html\"><img class=\"img-fluid\" src=\"../THUMBNAIL_FILES/$ISSUEOF/$ISSUEOF-0.jpeg\" alt=\"THUMBNAIL FOR $JPEG_NAME\"></a>
+					<p>PAGE 1</p>
+				</div>
+					" >> $HTML_DIR/$ISSUEOF.html		
 		for ((number=1; number < $MAX_PAGE; number++))
 		{
 				CURRENT_PAGE=`expr $number + 1`
-		echo "				<div class=\"row\">
-						<div class=\"col-sm-4\">
-							<a href=\"$ISSUEOF/$ISSUEOF-$number.html\"><img src=\"../THUMBNAIL_FILES/$ISSUEOF/$ISSUEOF-$number.jpeg\" alt=\"THUMBNAIL FOR $JPEG_NAME\"></a>
-								<p>PAGE $CURRENT_PAGE</p>
-						</div>
-					</div>
+		echo "				<div class=\"col-xl-2 col-lg-3 col-md-4 col-sm-6 col-12\">
+					<a href=\"$ISSUEOF/$ISSUEOF-$number.html\"><img class=\"img-fluid\" src=\"../THUMBNAIL_FILES/$ISSUEOF/$ISSUEOF-$number.jpeg\" alt=\"THUMBNAIL FOR $JPEG_NAME\"></a>
+					<p>PAGE $CURRENT_PAGE</p>
+				</div>
 						" >> $HTML_DIR/$ISSUEOF.html	
-	}
-	echo "			<p><a href=\"../index.html\">BACK TO MAIN</a></p>	
-	</body>
-</html>" >> $HTML_DIR/$ISSUEOF.html	#single file for each issue is generated
+		}
 }
 
 NUMBER_OF_ARGS=$#	#assigning names so that
@@ -106,13 +101,14 @@ do						#we use loop to repeat some specific tasks for each file.
 		<title>$ISSUEMONTH issue of $ISSUEYEAR</title>	
 		<meta charset=\"utf-8\">
 		<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
-		<link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css\">
+		<link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css\">
 		<link rel=\"stylesheet\" href=\"mycss.css\">
 		<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js\"></script>
-		<script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js\"></script>
+		<script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js\"></script>
+		<script src=\"https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js\"></script>
 	</head>
 	<body>
-		<div class=\"container\">"> $HTML_DIR/$ISSUEOF.html
+		<div class=\"container-fluid\">"> $HTML_DIR/$ISSUEOF.html
 
 	mkdir -p $JPEG_DIR/$ISSUEOF		#creating directory by the name consisting of month and year of 
 	mkdir -p $HTML_DIR/$ISSUEOF		#issue to keep all the files of a particular issue in groups
@@ -188,6 +184,12 @@ do						#we use loop to repeat some specific tasks for each file.
 	echo "PAGE_NO:$PAGE_NO"
 		makeanissue $ISSUEOF $MAX_PAGE
 		#list of issues is put on main page
+		echo "			</div>			
+			<p><a href=\"../index.html\">BACK TO MAIN</a></p>	
+		</div>
+	</body>
+</html>" >> $HTML_DIR/$ISSUEOF.html	#single file for each issue is generated
+	
 	echo "<p><a href=\"HTML_FILES/$ISSUEOF.html\">Issue of $ISSUEOF</a></p>" >> $OUTPUT_DIR/index.html
 done 
 	echo "	</body>
