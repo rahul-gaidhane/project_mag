@@ -1,0 +1,27 @@
+.row {
+	display:flex;
+	margin-bottom: 20px;
+}
+
+.container-fluid {
+        background-color: wheat;
+}
+.row {
+        background-color: lightblue;
+}
+.col-xl-2 {
+        background-color: seagreen;
+}
+.col-lg-3 {
+        background-color: seagreen;
+}
+.col-md-4 {
+        background-color: seagreen;
+}
+.col-sm-6 {
+        background-color: seagreen;
+}
+.col-12 {
+        background-color: seagreen;
+}
+
