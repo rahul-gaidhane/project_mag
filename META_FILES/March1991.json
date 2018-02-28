@@ -1,6 +1,5 @@
-{ "issue":[
-	{ "issuemonth":"March" },
-	{ "issueyear":"1991" },
-	{ "maxpages":32}
-	]
+{
+"issuemonth":"March",
+"issueyear":"1991",
+"maxpages":32
 }

@@ -7,7 +7,7 @@ makeanissue()
 	MAX_PAGE=$2
 	echo "			<div class=\"row\">
 				<div class=\"col-xl-2 col-lg-3 col-md-4 col-sm-6 col-12\">
-					<a href=\"$ISSUEOF/index.html\"><img class=\"img-fluid\" src=\"../THUMBNAIL_FILES/$ISSUEOF/$ISSUEOF-0.jpeg\" alt=\"THUMBNAIL FOR $JPEG_NAME\"></a>
+					<a href=\"$ISSUEOF/index.html\"><img class=\"img-fluid\" src=\"../THUMBNAIL_FILES/$ISSUEOF/$ISSUEOF-0.jpeg\" alt=\"PAGE 1 THUMBNAIL\"></a>
 					<p>PAGE 1</p>
 				</div>
 					" >> $HTML_DIR/$ISSUEOF.html		
@@ -15,7 +15,7 @@ makeanissue()
 		{
 				CURRENT_PAGE=`expr $number + 1`
 		echo "				<div class=\"col-xl-2 col-lg-3 col-md-4 col-sm-6 col-12\">
-					<a href=\"$ISSUEOF/$ISSUEOF-$number.html\"><img class=\"img-fluid\" src=\"../THUMBNAIL_FILES/$ISSUEOF/$ISSUEOF-$number.jpeg\" alt=\"THUMBNAIL FOR $JPEG_NAME\"></a>
+					<a href=\"$ISSUEOF/$ISSUEOF-$number.html\"><img class=\"img-fluid\" src=\"../THUMBNAIL_FILES/$ISSUEOF/$ISSUEOF-$number.jpeg\" alt=\"PAGE $CURRENT_PAGE THUMBNAIL\"></a>
 					<p>PAGE $CURRENT_PAGE</p>
 				</div>
 						" >> $HTML_DIR/$ISSUEOF.html	
@@ -91,8 +91,8 @@ do						#we use loop to repeat some specific tasks for each file.
 #	echo "ISSUEOF:$ISSUEOF"	
 # 	creates each individual file for each issue 
 
-	ISSUEMONTH=`jq '.issue[0].issuemonth' META_FILES/$ISSUEOF.json | cut -d'"' -f 2` #using jq parser to parse the json metadata
-	ISSUEYEAR=`jq '.issue[1].issueyear' META_FILES/$ISSUEOF.json | cut -d'"' -f 2`  #file to extract month and year of an issue 
+	ISSUEMONTH=`jq '.issuemonth' META_FILES/$ISSUEOF.json | cut -d'"' -f 2` #using jq parser to parse the json metadata
+	ISSUEYEAR=`jq '.issueyear' META_FILES/$ISSUEOF.json | cut -d'"' -f 2`  #file to extract month and year of an issue 
 
 	> $HTML_DIR/$ISSUEOF.html	#create an individual HTML file for issue
 	echo "<!DOCTYPE html>
@@ -185,8 +185,8 @@ do						#we use loop to repeat some specific tasks for each file.
 		makeanissue $ISSUEOF $MAX_PAGE
 		#list of issues is put on main page
 		echo "			</div>			
-			<p><a href=\"../index.html\">BACK TO MAIN</a></p>	
 		</div>
+	<p><a href=\"../index.html\">BACK TO MAIN</a></p>	
 	</body>
 </html>" >> $HTML_DIR/$ISSUEOF.html	#single file for each issue is generated
 	
