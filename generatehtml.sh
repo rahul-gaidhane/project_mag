@@ -98,7 +98,7 @@ do						#we use loop to repeat some specific tasks for each file.
 	echo "<!DOCTYPE html>
 <html lang=\"en\">
 	<head>
-		<title>$ISSUEMONTH issue of $ISSUEYEAR</title>	
+		<title>$ISSUEMONTH Issue Of $ISSUEYEAR</title>	
 		<meta charset=\"utf-8\">
 		<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
 		<link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css\">
@@ -108,7 +108,8 @@ do						#we use loop to repeat some specific tasks for each file.
 		<script src=\"https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js\"></script>
 	</head>
 	<body>
-		<div class=\"container-fluid\">"> $HTML_DIR/$ISSUEOF.html
+		<div class=\"container-fluid\">
+		<h1>$ISSUEMONTH Issue Of $ISSUEYEAR</h1>"> $HTML_DIR/$ISSUEOF.html
 
 	mkdir -p $JPEG_DIR/$ISSUEOF		#creating directory by the name consisting of month and year of 
 	mkdir -p $HTML_DIR/$ISSUEOF		#issue to keep all the files of a particular issue in groups

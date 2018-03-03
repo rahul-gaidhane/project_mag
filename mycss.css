@@ -1,14 +1,14 @@
 
 
 .container-fluid {
-        background-color: wheat;
+        background-color: aquamarine;
 }
 .row {
         background-color: lightblue;
 }
 .col-xl-2 {
 	padding-top:5px;
-        background-color: white;
+  background-color: white;
 	position:relative;
 	border:2px solid aqua;
 }
@@ -48,6 +48,17 @@ img {
 	margin-bottom:20px;
 }
 
-	
+p {
+    	background-color: lightblue;
+    	font-family: times;
+    	margin-top: 5px;
+}
+
+h1 {
+	text-align: center;
+	font-family: times new roman,times,serif;
+	background-color: lightblue;
+	margin-top: 5px;
+}	
 
 
