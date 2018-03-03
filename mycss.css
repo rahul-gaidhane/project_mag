@@ -1,7 +1,4 @@
-.row {
-	display:flex;
-	margin-bottom: 20px;
-}
+
 
 .container-fluid {
         background-color: wheat;
@@ -10,18 +7,47 @@
         background-color: lightblue;
 }
 .col-xl-2 {
-        background-color: seagreen;
+	padding-top:5px;
+        background-color: white;
+	position:relative;
+	border:2px solid aqua;
 }
 .col-lg-3 {
-        background-color: seagreen;
+	padding-top:5px;
+        background-color: white;
+	position:relative;
+	border:2px solid aqua;
 }
 .col-md-4 {
-        background-color: seagreen;
+	padding-top:5px;	
+	position:relative;
+	background-color: white;
+	border:2px solid aqua;
 }
 .col-sm-6 {
-        background-color: seagreen;
+	padding-top:5px;
+	position:relative;        
+	background-color: white;
+	border:2px solid aqua;
 }
 .col-12 {
-        background-color: seagreen;
+	padding-top:5px; 	
+	position:relative;       
+	background-color: white;
+	border:2px solid aqua;
 }
+
+div > p { 
+	position:absolute;
+	bottom:0px;
+	font-size:15px;
+	margin-bottom:0px;
+}
+
+img {
+	margin-bottom:20px;
+}
+
+	
+
 
