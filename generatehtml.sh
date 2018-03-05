@@ -21,7 +21,7 @@ makeanissue()
 						" >> $HTML_DIR/$ISSUEOF.html	
 		}
 }
-
+	
 NUMBER_OF_ARGS=$#	#assigning names so that
 #echo "NUMBER_OF_ARGS:$NUMBER_OF_ARGS"
 INPUT_DIR=$1		#it will be easier to 
@@ -91,8 +91,15 @@ do						#we use loop to repeat some specific tasks for each file.
 #	echo "ISSUEOF:$ISSUEOF"	
 # 	creates each individual file for each issue 
 
-	ISSUEMONTH=`jq '.issuemonth' META_FILES/$ISSUEOF.json | cut -d'"' -f 2` #using jq parser to parse the json metadata
-	ISSUEYEAR=`jq '.issueyear' META_FILES/$ISSUEOF.json | cut -d'"' -f 2`  #file to extract month and year of an issue 
+	jq '.issuemonth' META_FILES/$ISSUEOF.json 2>/dev/null
+	if [ $? -eq 0 ]
+  then
+		ISSUEMONTH=`jq '.issuemonth' META_FILES/$ISSUEOF.json | cut -d'"' -f 2 `
+		ISSUEYEAR=`jq '.issueyear' META_FILES/$ISSUEOF.json | cut -d '"' -f 2` 
+	else
+		ISSUEMONTH="An Monthly"
+		ISSUEYEAR="Nav Sudharak"
+	fi
 
 	> $HTML_DIR/$ISSUEOF.html	#create an individual HTML file for issue
 	echo "<!DOCTYPE html>
