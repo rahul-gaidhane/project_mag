@@ -61,17 +61,24 @@ fi
  
 INPUT_FILES_LIST=`ls $INPUT_DIR`	#contains list of files for which HTML pages are to be generated
 #echo "INPUT_FILES_LIST:$INPUT_FILES_LIST"
-
+ISSUEYEAR=`basename $INPUT_DIR`
 mkdir -p $HTML_DIR $JPEG_DIR $THUMBNAIL_DIR	#create the specified directories to store output
 
 > $OUTPUT_DIR/index.html 	#creates $OUTPUT_DIR/index.html inside html directory, which lists all the issues
 echo "<!DOCTYPE html>
 <html lang=\"en\">
 	<head>
-		<title>LIST OF ISSUES BETWEEN 1990-1991</title>
+		<title>LIST OF MONTHLY ISSUES</title>
 		<meta charset=\"utf-8\">
+		<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
+		<link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css\">
+		<link rel=\"stylesheet\" href=\"CSS/indexcss.css\">
+		<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js\"></script>
+		<script src=\"https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js\"></script>
+		<script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js\"></script>
 	</head>
 	<body>
+		<h1>LIST OF ISSUES OF $ISSUEYEAR</h1>
 		" > $OUTPUT_DIR/index.html
 for INPUT_FILENAME in $INPUT_FILES_LIST		#using loop we convert each INPUT_FILENAME into jpeg images
 do						#we use loop to repeat some specific tasks for each file.
@@ -91,7 +98,7 @@ do						#we use loop to repeat some specific tasks for each file.
 #	echo "ISSUEOF:$ISSUEOF"	
 # 	creates each individual file for each issue 
 
-	jq '.issuemonth' META_FILES/$ISSUEOF.json 2>/dev/null
+	useless=`jq '.issuemonth' META_FILES/$ISSUEOF.json 2>/dev/null`
 	if [ $? -eq 0 ]
   then
 		ISSUEMONTH=`jq '.issuemonth' META_FILES/$ISSUEOF.json | cut -d'"' -f 2 `
@@ -109,7 +116,7 @@ do						#we use loop to repeat some specific tasks for each file.
 		<meta charset=\"utf-8\">
 		<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
 		<link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css\">
-		<link rel=\"stylesheet\" href=\"mycss.css\">
+		<link rel=\"stylesheet\" href=\"../CSS/issuecss.css\">
 		<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js\"></script>
 		<script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js\"></script>
 		<script src=\"https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js\"></script>
@@ -154,11 +161,14 @@ do						#we use loop to repeat some specific tasks for each file.
 		
 		> $HTML_DIR/$ISSUEOF/$HTML_FILENAME	#creating html file for each image
 		echo "<!DOCTYPE html>
-	<html>
+	<html lang=\"en\">
 		<head>
-			<title>Page $PAGE_NO:$ISSUEMONTH $ISSUEYEAR</title>
+			<title>Page $PAGE_NO:$ISSUEMONTH Issue Of $ISSUEYEAR</title>
+			<meta charset=\"utf-8\">
+			<link rel=\"stylesheet\" href=\"../../CSS/htmlcss.css\">
 		</head>
 		<body>
+			<h4>PAGE $PAGE_NO:$ISSUEMONTH Issue Of $ISSUEYEAR<h4>
 			<img src=\"../../JPEG_FILES/$ISSUEOF/$JPEG_FILENAME\" alt=$JPEG_NAME>
 ">>$HTML_DIR/$ISSUEOF/$HTML_FILENAME
 			if [ $PAGE_NO -eq 1 ] 
