@@ -1,0 +1,18 @@
+def genhtml(PAGE_NO, ISSUEMONTH, ISSUEYEAR):
+    with open('newfile', 'w') as f:
+        f.write('<!DOCTYPE html>\n')
+        f.write('<html lang="en">\n')
+        f.write('   <head>\n')
+        f.write('       <title>%s Issue Of %s</title>\n' % (ISSUEMONTH, ISSUEYEAR))
+        f.write('       <meta charset="utf-8">\n')
+        f.write('       <link rel="stylesheet" href="../../CSS/htmlcss.css">\n')
+        f.write('   </head>\n')
+        f.write('   <body>\n')
+        f.write('       <h4>Page %d: %s Issue Of %s</h4>\n' % (PAGE_NO,ISSUEMONTH, ISSUEYEAR))
+        f.write('       <img src="...">\n')
+        f.write('       <p><a href="...">Previous Page</a></p>\n')
+        f.write('       <p><a href="...">Next Page</a></p>\n')
+        f.write('       <p><a href="...">Back To Main</a></p>\n')
+        f.write('       <p><a href="...">Back To Issue Main</a></p>\n')
+        f.write('   </body>\n')
+        f.write('</html>')
