@@ -4,4 +4,4 @@ MAG_FILES
 TIFF_FILES
 THUMB_FILES
 output
-*.pyc
+PYTHON_CODE/_pycache_
