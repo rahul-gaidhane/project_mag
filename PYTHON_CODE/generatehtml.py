@@ -20,3 +20,28 @@ def genhtml(PAGE_NO, ISSUEMONTH, ISSUEYEAR):
         f.write('       <p><a href="...">Back To Issue Main</a></p>\n')
         f.write('   </body>\n')
         f.write('</html>')
+
+
+def genimage(TIFF_FILENAME):
+"""call imports() but it gave NameError:os not defined.why ?"""
+    import os
+    from PIL import Image
+    FILENAME = TIFF_FILENAME.split('.')[0]
+    try:
+        os.mkdir(FILENAME)
+    except FileExistsError:
+        pass
+    img = Image.open(TIFF_FILENAME)
+    os.chdir(FILENAME)
+    for count in range(100):
+        try:
+            img.seek(count)
+            img.save('%s-%d.jpg'%(FILENAME,count))
+        except EOFError:
+            break
+    os.chdir('..')
+
+def imports():
+    print("imports is called")
+    import os
+    from PIL import Image
