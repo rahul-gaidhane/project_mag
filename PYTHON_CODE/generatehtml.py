@@ -1,3 +1,4 @@
+import os
 def genhtml(PAGE_NO, ISSUEMONTH, ISSUEYEAR):
     with open('newfile', 'w') as f:
         f.write('<!DOCTYPE html>\n')
@@ -22,11 +23,11 @@ def genhtml(PAGE_NO, ISSUEMONTH, ISSUEYEAR):
         f.write('</html>')
 
 
-def genimage(TIFF_FILENAME):
-"""call imports() but it gave NameError:os not defined.why ?"""
-    import os
+def GenImage(TIFF_FILENAME):
+    """call imports() but it gave NameError:os not defined.why ?"""
+
     from PIL import Image
-    FILENAME = TIFF_FILENAME.split('.')[0]
+    FILENAME = GetFileName(TIFF_FILENAME)
     try:
         os.mkdir(FILENAME)
     except FileExistsError:
@@ -41,7 +42,38 @@ def genimage(TIFF_FILENAME):
             break
     os.chdir('..')
 
-def imports():
-    print("imports is called")
+def GetFileName(InputFilePath):
+    return InputFilePath.split('/')[len(InputFilePath.split('/')) - 1]
+
+def GenAnnualImages(InputDir):
+    imports()
+    InputDirList = os.listdir(InputDir)
+    OutputPath = os.getcwd() + '1990-91'    '''1990-91 can be passed as argument'''
+    os.mkdir(OutputPath)
+    for MonthlyIssue in InputDirList:
+        GenImage(InputDir + '/' + MonthlyIssue)
+
+
+
+def Imports():
+    print("In Imports:\n")
     import os
     from PIL import Image
+
+def Main(InputPath, OutputPath):
+    Imports()
+    if OutputPath == '':
+        OutputPath = os.getcwd + '/' + 'Output'
+    else :
+        OutputPath = OutputPath + '/' + 'Output'
+    MainMain(InputPath,OutputPath)
+        
+def MainMain(InputPath, OutputPath):
+    os.mkdir(OutputPath)
+    genmainpage()   '''develope module to generate main html page'''
+    InputDirList = os.listdir(InputPath)
+    for year in InputDirList:
+        OutputPath = OutputPath + '/' + year
+        os.mkdir(OutputPath)
+        InputPath = InputDir + '/' + year
+        GenAnnualImages(InputPath)
