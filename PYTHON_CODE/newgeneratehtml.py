@@ -1,6 +1,7 @@
 import os
 from PIL import Image
-import magic #use "pip3 install python-magic" command to install magic library 
+import magic #use "pip3 install python-magic" command to install magic library
+import subprocess
 
 def main(InputDir, OutputDir):
     if OutputDir == "":
@@ -13,10 +14,7 @@ def main(InputDir, OutputDir):
         pass
     InputAnnualDirList = os.listdir(InputDir)
     os.chdir(OutputDir)
-    try:
-        f = open('index.html', 'w')
-    except FileExistsError:
-        pass
+    f = open('index.html', 'w')
     f.write('<!DOCTYPE html>\n')
     f.write('<html lang="en">\n')
     f.write('\t<head>\n')
@@ -44,47 +42,53 @@ def GenMetaFiles(OutputDirPath):
     print("Inside GenMetaFiles:\n")
     print("OutputDirPath = %s" % (OutputDirPath))
 
-def GenJpegImages(TiffDirPath, JpegDirPath):
+def GenJpegImages(ArchiveDirPath, JpegDirPath):
     print("Inside GenJpegImages:\n")
-    print("TiffDirPath = %s\n" % (TiffDirPath))
+    print("ArchiveDirPath = %s\n" % (ArchiveDirPath))
     print("JpegDirPath = %s\n" % (JpegDirPath))
     JpegDirPath = JpegDirPath + '/JPEG_FILES'
     try:
         os.mkdir(JpegDirPath)
     except FileExistsError:
         pass
-    TiffFileList = os.listdir(TiffDirPath)
+    ArchiveFileList = os.listdir(ArchiveDirPath)
     os.chdir(JpegDirPath)
-    for TiffFile in TiffFileList:
-        TiffFilename = TiffFile.split('.')[0]
-        TiffFilePath = TiffDirPath + '/' + TiffFile
-        if GetFileType(TiffFilePath) == 'tiff':
-            try:
-                os.mkdir(TiffFilename)
-            except FileExistsError:
-                pass
-            os.chdir(TiffFilename)
-            img = Image.open(TiffFilePath)
+    for ArchiveFile in ArchiveFileList:
+        ArchiveFileName = ArchiveFile.split('.')[0]
+        ArchiveFilePath = ArchiveDirPath + '/' + ArchiveFile
+        JpegArchivePath = JpegDirPath + '/' + ArchiveFileName
+        try:
+            os.mkdir(ArchiveFileName)
+        except FileExistsError:
+            pass
+        os.chdir(ArchiveFileName)
+        if GetFileType(ArchiveFilePath) == 'tiff':
+            img = Image.open(ArchiveFilePath)
             for imgcount in range(1000):
                 try:
                     img.seek(imgcount)
-                    img.save('%s-%d.jpeg' % (TiffFilename, imgcount))
+                    img.save('%s-%d.jpeg' % (ArchiveFileName, imgcount))
                 except EOFError:
                     break
             os.chdir('..')
+        elif GetFileType(ArchiveFilePath) == 'pdf':
+            JpegArchiveFile = JpegArchivePath + '/' + ArchiveFileName + '.jpeg'
+            print('Inside pdf conversion\nJpegArchiveFile = %s\nArchiveFilePath = %s' % (JpegArchiveFile, ArchiveFilePath))
+#            subprocess.call(['convert', '-trim', '-density', '200', ArchiveFilePath, '-quality', '100', JpegArchiveFile])
+            os.system('convert -trim -density 200 %s -quality 100 %s 2>/dev/null' % (ArchiveFilePath, JpegArchiveFile))
+            os.chdir('..')
         else:
-            print('Module yet to be generated')
+            print("FileTypeError : In apropriate File detected\nFilePath = %s" % (ArchiveFilePath))
 
+def GenThumbnailImages(FileDirPath, ThumbnailDirPath):
+#    print("Inside GenThumbnailImages:\n")
+#    print("FileDirPath = %s\n" % (FileDirPath))
+#    print("ThumbnailDirPath = %s\n" % (ThumbnailDirPath))
 
-def GenThumbnailImages(TiffDirPath, ThumbnailDirPath):
-    print("Inside GenThumbnailImages:\n")
-    print("TiffDirPath = %s\n" % (TiffDirPath))
-    print("ThumbnailDirPath = %s\n" % (ThumbnailDirPath))
 
 def GenHtmlFiles(OutputDirPath):
     print("Inside GenHtmlFiles:\n")
     print("OutputDirPath = %s\n" % (OutputDirPath))
 
 def GetFileType(FilePath):
-    print('Inside GetFileType = %s' % (FilePath))
     return (magic.from_file(FilePath, mime=True)).split('/')[1]
