@@ -74,8 +74,9 @@ def GenJpegImages(ArchiveDirPath, JpegDirPath):
         elif GetFileType(ArchiveFilePath) == 'pdf':
             JpegArchiveFile = JpegArchivePath + '/' + ArchiveFileName + '.jpeg'
             print('Inside pdf conversion\nJpegArchiveFile = %s\nArchiveFilePath = %s' % (JpegArchiveFile, ArchiveFilePath))
-#            subprocess.call(['convert', '-trim', '-density', '200', ArchiveFilePath, '-quality', '100', JpegArchiveFile])
-            os.system('convert -trim -density 200 %s -quality 100 %s 2>/dev/null' % (ArchiveFilePath, JpegArchiveFile))
+            f = open('/dev/null', 'w')
+            subprocess.call(['convert', '-trim', '-density', '200', ArchiveFilePath, '-quality', '100', JpegArchiveFile], stderr=f)
+    #        os.system('convert -trim -density 200 %s -quality 100 %s 2>/dev/null' % (ArchiveFilePath, JpegArchiveFile))
             os.chdir('..')
         else:
             print("FileTypeError : In apropriate File detected\nFilePath = %s" % (ArchiveFilePath))
