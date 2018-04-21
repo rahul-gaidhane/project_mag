@@ -3,7 +3,7 @@ from PIL import Image
 import magic #use "pip3 install python-magic" command to install magic library
 import subprocess
 
-#
+##
 def main(InputDir, OutputDir):
     if not OutputDir:
         OutputDir = os.path.join(os.getcwd(), 'Output')
