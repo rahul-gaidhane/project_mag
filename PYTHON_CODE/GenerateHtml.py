@@ -27,7 +27,7 @@ def GenMetaFiles(OutputDirPath):
     print("Inside GenMetaFiles:\n")
     print("OutputDirPath = %s" % (OutputDirPath))
 
-def GenJpegThumbImages(ArchiveDirPath, OutputDirPath):
+def GenJpegThumbImages(ArchiveDirPath, OutputDirPath)
     print("Inside GenJpegThumbImages:\n")
     print("ArchiveDirPath = %s\n" % (ArchiveDirPath))
     print("OutputDirPath = %s\n" % (OutputDirPath))
