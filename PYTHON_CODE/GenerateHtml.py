@@ -3,7 +3,7 @@ from PIL import Image
 import magic #use "pip3 install python-magic" command to install magic library
 import subprocess
 
-
+#
 def main(InputDir, OutputDir):
     if not OutputDir:
         OutputDir = os.path.join(os.getcwd(), 'Output')
@@ -27,7 +27,7 @@ def GenMetaFiles(OutputDirPath):
     print("Inside GenMetaFiles:\n")
     print("OutputDirPath = %s" % (OutputDirPath))
 
-def GenJpegThumbImages(ArchiveDirPath, OutputDirPath)
+def GenJpegThumbImages(ArchiveDirPath, OutputDirPath):
     print("Inside GenJpegThumbImages:\n")
     print("ArchiveDirPath = %s\n" % (ArchiveDirPath))
     print("OutputDirPath = %s\n" % (OutputDirPath))
