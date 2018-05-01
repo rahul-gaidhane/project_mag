@@ -99,39 +99,45 @@ def GetReadyIndexHtml(IndexHtmlPath):
     IndexFileObj.write('<!DOCTYPE html>\n')
     IndexFileObj.write('<html lang="en">\n')
     IndexFileObj.write('\t<head>\n')
-    IndexFileObj.write('\t\t<title>Year-Wise List</title>\n')
-    IndexFileObj.write('\t\t<meta charset="utf-8"\n')
+    IndexFileObj.write('\t\t<title>आजचा सुधारक</title>\n')
+    IndexFileObj.write('\t\t<meta charset="utf-8">\n')
     IndexFileObj.write('\t\t<meta name="viewport" content="width=device-width, initial-scale=1.0">\n')
     IndexFileObj.write('\t\t<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">\n')
-    IndexFileObj.write('\t\t<link rel="stylesheet" href="CSS/IndexCss.html"\n')
+    IndexFileObj.write('\t\t<link rel="stylesheet" href="CSS/IndexCss.css">\n')
     IndexFileObj.write('\t\t<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>\n')
     IndexFileObj.write('\t\t<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>\n')
     IndexFileObj.write('\t\t<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>\n')
     IndexFileObj.write('\t</head>\n')
     IndexFileObj.write('\t<body>\n')
-    IndexFileObj.write('\t\t<h3>Year-Wise List Of Issues</h3>\n')
+    IndexFileObj.write('\t\t<div class="container">\n')
+    IndexFileObj.write('\t\t\t<h3 class="display-1">AAjcha Sudharak</h3>\n')
+    IndexFileObj.write('\t\t\t<div class="list-group">\n')
     return IndexFileObj
 
 def AddToIndexHtml(IndexFileObj, InputAnnualDir):
-    IndexFileObj.write('\t\t<p><a href="%s/AnnualList.html">%s</a></p>\n' % (InputAnnualDir, InputAnnualDir))
+    IndexFileObj.write('\t\t\t\t<a class="list-group-item text-center list-group-item-action" href="%s/AnnualList.html">%s</a>\n' % (InputAnnualDir, InputAnnualDir))
     return IndexFileObj
 
 def CloseIndexHtml(IndexFileObj):
+    IndexFileObj.write('\t\t\t</div>\n')
+    IndexFileObj.write('\t\t</div>\n')
     IndexFileObj.write('\t</body>\n')
     IndexFileObj.write('</html>\n')
     IndexFileObj.close()
 
 def CloseAnnualList(AnnualFileObj):
-    AnnualFileObj.write('\t\t<p><a href="../index.html">Back To Index</a></p>\n')
+    AnnualFileObj.write('\t\t</div>\n')
+    AnnualFileObj.write('\t\t<a class="btn btn-primary" href="../index.html">Back To Index</a>\n')
+    AnnualFileObj.write('\t</div>\n')
     AnnualFileObj.write('\t</body>\n')
     AnnualFileObj.write('</html>')
     AnnualFileObj.close()
 
 def CloseMonthList(MonthFileObj):
-    MonthFileObj.write('\t</div>\n')
-    MonthFileObj.write('\t</div>\n')
-    MonthFileObj.write('\t<p><a href="../../index.html">Back To Index</a></p>\n')
-    MonthFileObj.write('\t<p><a href="../AnnualList.html">Back To Annual List</a></p>\n')
+    MonthFileObj.write('\t\t\t</div>\n')
+    MonthFileObj.write('\t\t\t<a class="btn btn-primary" href="../../index.html">Back To Index</a>\n')
+    MonthFileObj.write('\t\t\t<a class="btn btn-primary" href="../AnnualList.html">Back To Annual List</a>\n')
+    MonthFileObj.write('\t\t</div>\n')
     MonthFileObj.write('\t</body>\n')
     MonthFileObj.write('</html>\n')
     MonthFileObj.close()
@@ -152,29 +158,33 @@ def MakeImageHtml(ImageHtmlPath, JpegMonthDir, ImageName, MaxPage):
     f.write('\t\t<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>\n')
     f.write('\t</head>\n')
     f.write('\t<body>\n')
-    f.write('\t\t<h4>Page %d : %s</h4>\n' % (PageNumber + 1, JpegMonthDir))
-    f.write('\t\t<img src="../../JPEG_FILES/%s/%s.jpeg" alt="Image : %s">\n' % (JpegMonthDir, ImageName, ImageName))
+    f.write('\t\t<div class="container">\n')
+    f.write('\t\t\t<h4 class="text-center display-4">Page %d : %s</h4>\n' % (PageNumber + 1, JpegMonthDir))
+    f.write('\t\t\t<img class="img-fluid" src="../../JPEG_FILES/%s/%s.jpeg" alt="Image : %s"><br>\n' % (JpegMonthDir, ImageName, ImageName))
     if PageNumber == 0:
-        f.write('\t\t<p><a href="../%s.html"><< PREVIOUS</a></p>\n' % (JpegMonthDir))
+        f.write('\t\t\t<a class="btn btn-primary" href="../%s.html">PREVIOUS</a>\n' % (JpegMonthDir))
     else:
-        f.write('\t\t<p><a href="%s-%d.html"><< PREVIOUS</a></p>\n' % (JpegMonthDir, PageNumber - 1))
+        f.write('\t\t\t<a class="btn btn-primary" href="%s-%d.html">PREVIOUS</a>\n' % (JpegMonthDir, PageNumber - 1))
     if PageNumber == MaxPage:
-        f.write('\t\t<p><a href="../../AnnualList.html">NEXT >></a></p>\n')
+        f.write('\t\t\t<a class="btn btn-primary" href="../../AnnualList.html">NEXT</a>\n')
     else:
-        f.write('\t\t<p><a href="%s-%d.html">NEXT >></a></p>\n' % (JpegMonthDir, PageNumber + 1))
-    f.write('\t\t<p><a href="../../../index.html">HOME</a></p>\n')
-    f.write('\t\t<p><a href="../../AnnualList.html">ANNUAL LIST</a></p>\n')
-    f.write('\t\t<p><a href="../%s.html">MONTH LIST</a></p>\n' % (JpegMonthDir))
+        f.write('\t\t\t<a class="btn btn-primary" href="%s-%d.html">NEXT</a>\n' % (JpegMonthDir, PageNumber + 1))
+    f.write('\t\t\t<a class="btn btn-primary" href="../../../index.html">HOME</a>\n')
+    f.write('\t\t\t<a class="btn btn-primary" href="../../AnnualList.html">ANNUAL LIST</a>\n')
+    f.write('\t\t\t<a class="btn btn-primary" href="../%s.html">MONTH LIST</a>\n' % (JpegMonthDir))
+    f.write('\t\t</div>')
     f.write('\t</body>\n')
     f.write('</html>\n')
     f.close()
 
 def GetReadyAnnualList(AnnualListPath):
     f = open(AnnualListPath, 'w')
+    #updated logic
+    year = AnnualListPath.split('/')[-2]
     f.write('<!DOCTYPE html>\n')
     f.write('<html lang="en">\n')
     f.write('\t<head>\n')
-    f.write('\t\t<title>Annual List</title>\n')
+    f.write('\t\t<title>%s List</title>\n' % (year))
     f.write('\t\t<meta charset="utf-8">\n')
     f.write('\t\t<meta name="viewport" content="width=device-width, initial-scale=1.0">\n')
     f.write('\t\t<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">\n')
@@ -184,17 +194,19 @@ def GetReadyAnnualList(AnnualListPath):
     f.write('\t\t<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>\n')
     f.write('\t</head>\n')
     f.write('\t<body>\n')
-    #f.write('\t\t<div class="container">\n')
-    f.write('\t\t<h1>List Of Monthly Issues</h1>\n')
-    #f.write('\t\t<div class="row">\n')
+    f.write('\t\t<div class="container">\n')
+    f.write('\t\t<h1>List Of %s Issues</h1>\n' % (year))
+    f.write('\t\t\t<div class="list-group">\n')
     return f
 
 def GetReadyMonthList(MonthListPath):
     f = open(MonthListPath, 'w')
+    #updated code
+    month = os.path.basename(MonthListPath).split('.')[0]
     f.write('<!DOCTYPE html>\n')
     f.write('<html lang="en">\n')
     f.write('\t<head>\n')
-    f.write('\t\t<title>Month List</title>\n')
+    f.write('\t\t<title>%s Issue</title>\n' % (month))
     f.write('\t\t<meta name="viewport" content="width=device-width, initial-scale=1.0">\n')
     f.write('\t\t<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">\n')
     f.write('\t\t<link rel="stylesheet" href="../../CSS/MonthListCss.css">\n')
@@ -204,20 +216,20 @@ def GetReadyMonthList(MonthListPath):
     f.write('\t</head>\n')
     f.write('\t<body>\n')
     f.write('\t\t<div class="container">\n')
-    f.write('\t\t<h1>List Of Pages Monthly Issues</h1>\n')
-    f.write('\t\t<div class="row">\n')
+    f.write('\t\t\t<h1>%s Issue</h1>\n' % (month))
+    f.write('\t\t\t<div class="row">\n')
     return f
 
 def AddToAnnualListHtml(AnnualFileObj, MonthDir):
-    AnnualFileObj.write('\t\t\t<p><a href="HTML_FILES/%s.html">%s</a></p>\n' % (MonthDir, MonthDir))
+    AnnualFileObj.write('\t\t\t\t<a class="list-group-item text-center list-group-item-action" href="HTML_FILES/%s.html">%s</a>\n' % (MonthDir, MonthDir))
     return AnnualFileObj
 
 def AddToMonthListHtml(MonthFileObj, JpegMonthDir, ImageName):
     PageNumber = int(GetPageNumber(ImageName))
-    MonthFileObj.write('\t\t<div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-12">\n')
-    MonthFileObj.write('\t\t\t<a href="%s/%s.html"><img class="img-fluid" src="../THUMBNAIL_FILES/%s/%s.jpeg" alt="%d Thumbnail"></a>\n' % (JpegMonthDir, ImageName, JpegMonthDir, ImageName, PageNumber))
-    MonthFileObj.write('\t\t\t<p>Page %d</p>\n' % (PageNumber))
-    MonthFileObj.write('\t\t</div>\n')
+    MonthFileObj.write('\t\t\t\t<div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-12">\n')
+    MonthFileObj.write('\t\t\t\t\t<a href="%s/%s.html"><img class="img-fluid" src="../THUMBNAIL_FILES/%s/%s.jpeg" alt="%d Thumbnail"></a>\n' % (JpegMonthDir, ImageName, JpegMonthDir, ImageName, PageNumber))
+    MonthFileObj.write('\t\t\t\t\t<p>Page %d</p>\n' % (PageNumber))
+    MonthFileObj.write('\t\t\t\t</div>\n')
     return MonthFileObj
 
 def MakeMonthList(MonthFileObj, JpegMonthDir, MaxPage):
