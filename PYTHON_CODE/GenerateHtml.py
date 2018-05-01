@@ -2,6 +2,7 @@ import os
 from PIL import Image
 import magic #use "pip3 install python-magic" command to install magic library
 import subprocess
+import logging
 
 ##
 def main(InputDir, OutputDir):
@@ -9,6 +10,7 @@ def main(InputDir, OutputDir):
         OutputDir = os.path.join(os.getcwd(), 'Output')
     else:
         OutputDir = os.path.join(OutputDir, 'Output')
+    logging.basicConfig(level=logging.DEBUG)
     MakeDir(OutputDir)
     InputAnnualDirList = os.listdir(InputDir)
     IndexHtmlPath = os.path.join(OutputDir, 'index.html')
@@ -24,13 +26,13 @@ def main(InputDir, OutputDir):
     CloseIndexHtml(IndexFileObj)
 
 def GenMetaFiles(OutputDirPath):
-    print("Inside GenMetaFiles:\n")
-    print("OutputDirPath = %s" % (OutputDirPath))
+    logging.info("Inside GenMetaFiles:")
+    logging.debug("OutputDirPath = %s" % (OutputDirPath))
 
 def GenJpegThumbImages(ArchiveDirPath, OutputDirPath):
-    print("Inside GenJpegThumbImages:\n")
-    print("ArchiveDirPath = %s\n" % (ArchiveDirPath))
-    print("OutputDirPath = %s\n" % (OutputDirPath))
+    logging.info("Inside GenJpegThumbImages:")
+    logging.debug("ArchiveDirPath = %s\n" % (ArchiveDirPath))
+    logging.debug("OutputDirPath = %s\n" % (OutputDirPath))
     JpegDirPath = os.path.join(OutputDirPath, 'JPEG_FILES')
     ThumbnailDirPath = os.path.join(OutputDirPath, 'THUMBNAIL_FILES')
     MakeDir(JpegDirPath)
@@ -65,11 +67,11 @@ def GenJpegThumbImages(ArchiveDirPath, OutputDirPath):
             subprocess.call(['convert', '-trim', '-density', '200', ArchiveFilePath, '-quality', '100', JpegImagePath ], stderr=f)
             subprocess.call(['convert', '-trim', ArchiveFilePath, '-resize', '300', '-quality', '100', ThumbnailImagePath ], stderr=f)
         else:
-            print("FileTypeError : In apropriate File detected\nFilePath = %s" % (ArchiveFilePath))
+            logging.warning("FileTypeError : In apropriate File detected\nFilePath = %s" % (ArchiveFilePath))
 
 def GenHtmlFiles(OutputDirPath):
-    print("Inside GenHtmlFiles:\n")
-    print("OutputDirPath = %s\n" % (OutputDirPath))
+    logging.info("Inside GenHtmlFiles:")
+    logging.debug("OutputDirPath = %s\n" % (OutputDirPath))
     HtmlDirPath = os.path.join(OutputDirPath, 'HTML_FILES')
     MakeDir(HtmlDirPath)
     JpegDirPath = os.path.join(OutputDirPath, 'JPEG_FILES')
